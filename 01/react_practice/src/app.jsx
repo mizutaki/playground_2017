@@ -1,3 +1,5 @@
+import DragDrop from './dragdrop.js';
+let dragDrop = new DragDrop();
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -84,7 +86,7 @@ var DivDropArea = React.createClass({
       return <TextArea id={child.id} parentId={child.parentId} value={child.value} />
     });
     return(
-      <div id={this.props.divId}>
+      <div id={this.props.divId} onDrop={dragDrop.drop} onDragOver={dragDrop.dragOver}>
         <CreateButton buttonId={this.props.buttonId} onCreateTextArea={this.props.onCreateTextArea} parentId={this.props.divId} />
         {textarea}
       </div>
@@ -119,7 +121,7 @@ var TextArea = React.createClass({
   },
   render: function() {
     return(
-      <textarea id={this.props.id} value={this.state.value} draggable="true" onChange={this.onChangeText}/>
+      <textarea id={this.props.id} value={this.state.value} draggable="true" onChange={this.onChangeText} onDragStart={dragDrop.dragStart} onDragLeave={dragDrop.dragLeave}/>
     )
   }
 });

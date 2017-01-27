@@ -81,7 +81,7 @@
 	        key: "dragStart",
 	        value: function dragStart(e) {
 	            console.log("dragStart");
-	            this.style.opacity = '0.5';
+	            //this.style.opacity = '0.5';
 	            e.dataTransfer.effectAllowed = 'move';
 	            var originElement = {
 	                "elementId": e.target.id,
@@ -112,6 +112,8 @@
 	    }, {
 	        key: "drop",
 	        value: function drop(e) {
+	            console.log('drop');
+	            console.log(e);
 	            var ls = localStorage;
 	            if (e.stopPropagation) {
 	                e.stopPropagation();

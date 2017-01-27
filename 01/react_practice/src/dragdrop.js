@@ -14,7 +14,7 @@ class DragDrop {
 
     dragStart(e) {
         console.log("dragStart");
-        this.style.opacity = '0.5';
+        //this.style.opacity = '0.5';
         e.dataTransfer.effectAllowed = 'move';
         let originElement = {
             "elementId": e.target.id,
@@ -40,6 +40,8 @@ class DragDrop {
     }
 
     drop(e) {
+      console.log('drop');
+      console.log(e);
         let ls = localStorage;
         if (e.stopPropagation) {
             e.stopPropagation();
