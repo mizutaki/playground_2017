@@ -6,6 +6,9 @@
   <div id="dropArea"style="background-color:blue; height:500px;width:500px;">
 
   </div>
+  <% @img_paths.each do |img_path| %>
+    <img src="<%= img_path %>">
+  <% end %>
   <script>
   (function() {
     var div = document.querySelector('#dropArea');
@@ -15,12 +18,42 @@
     })
     div.addEventListener('drop', function(e) {
       e.preventDefault();
-      console.log();(e);
-      fileUpload();
+      console.log();
+      fileUpload(e.dataTransfer);
     });
   })();
-  function fileUpload() {
+  function fileUpload(data) {
     console.log("fileUpload");
+    for (var i = 0; i < data.files.length; i++) {
+      var file = data.files[i];
+      var fd = new FormData();
+      fd.append("file", file, file.name);
+      $.ajax('/static_pages/file_upload', {
+            xhr : function() {
+                XHR = $.ajaxSettings.xhr();
+                if (XHR.upload) {
+                    XHR.upload.addEventListener('progress',
+                            function(e) {
+                                /*progre = parseInt(e.loaded / e.total * 10000) / 100;
+                                console.log(progre + "%");
+                                document.getElementById(p_id).value = progre;
+                                document.getElementById(p_id).innerHTML = progre + '%';*/
+                                console.log("a");
+                            }, false);
+                }
+                return XHR;
+            },
+            method: 'POST',
+            contentType: false,
+            processData: false,
+            data: fd,
+            dataType: 'text',
+            success: function (m) {
+              console.log(m);
+              location.reload();
+            }
+        });
+    }
   }
 
   </script>
