@@ -1,10 +1,5 @@
 class StaticPagesController < ApplicationController
   def home
-    @img_paths = []
-    jpgs = Dir.glob(Rails.root.join('public', '*.jpg'))
-    jpgs.each do |j|
-      @img_paths.push('/'+ File.basename(j))
-    end
   end
 
   def file_upload
@@ -15,6 +10,6 @@ class StaticPagesController < ApplicationController
     File.open(file_path, 'wb') do |f|
       f.write read_file.read
     end
-    redirect_to action: 'home', status: :ok
+    render text: '/' + params['file'].original_filename
   end
 end
