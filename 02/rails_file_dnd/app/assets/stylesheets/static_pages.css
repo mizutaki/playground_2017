@@ -1,3 +1,10 @@
 #dorpArea {
   background-color: blue;
 }
+#showArea {
+  display: flex;
+  align-content: stretch;
+}
+#showArea > img {
+  padding: 5px;
+}
