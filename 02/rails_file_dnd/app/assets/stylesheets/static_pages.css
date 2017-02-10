@@ -8,3 +8,10 @@
 #showArea > img {
   padding: 5px;
 }
+#flexContainer {
+  display: flex;
+}
+#progressBarArea {
+  display: flex;
+  flex-direction: column;
+}
