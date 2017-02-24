@@ -3,16 +3,18 @@
   <head>
     <meta charset="utf-8"/>
     <title>ファイルのアップロード進捗</title>
-    <div id="flexContainer">
+    <!--<div id="flexContainer">
       <div id="dropArea" style="background-color:blue; height:500px;width:500px;">
         ここにファイルをアップロードする
       </div>
       <div id="progressBarArea"></div>
     </div>
     <div id="showArea"></div>
-  </div>
+  </div>-->
+  <div id="container"></div>
+  <%= javascript_include_tag 'webpack/app' %>
   <script>
-    (function () {
+    /*(function () {
       var div = document.querySelector('#dropArea');
       div.addEventListener('dragover', function (e) {
         e.preventDefault()
@@ -26,7 +28,7 @@
           fileUpload(e.dataTransfer.files[i], count);
         }
       });
-    })();
+    })();*/
 
     function addProgressBar(count) {
       var progress = document.createElement("progress");
