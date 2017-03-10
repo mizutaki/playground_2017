@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://unpkg.com/vue"></script>
+  <title>Swing</title>
+</head>
+<body>
+  <h2>1 month</h2>
+  <label>goal
+  <input type="text" />
+</label>
+  <input type="button" value="add" />
+  <label>archivement rate
+  <progress value="0" max="100">0%</progress>
+</label>
+  <br>
+  <div style="padding-left: 50px;">
+    <h4>1st week</h4>
+    <ul>
+      <li>
+        <label>target<input type="text" /></label>
+        <label>action<input type="text" /></label>
+        <input type="button" value="add" />
+        <p>target：朝早く起きる action：夜早く寝る<input type="button" value="edit" />
+          <input type="button" value="remove" /></p>
+      </li>
+    </ul>
+    <h4>2nd week</h4>
+    <ul>
+      <li>
+        <label>target<input type="text" /></label>
+        <label>action<input type="text" /></label>
+      </li>
+    </ul>
+    <h4>3rd week</h4>
+    <ul>
+      <li>
+        <label>target<input type="text" /></label>
+        <label>action<input type="text" /></label>
+      </li>
+    </ul>
+    <h4>4th week</h4>
+    <div id="app-4">
+    <ul>
+      <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+    </ul>
+  </div>
+  <script>
+    var test = Vue.extend({
+      template: '<label>target<input type="text" /></label>\
+      <label>action<input type="text" /></label>'
+    })
+    Vue.component('todo-item', {
+      props: ['todo'],
+      template: '<li>{{ todo.text }}</li>'
+    })
+    var app4 = new Vue({
+      el: '#app-4',
+      data: {
+        groceryList: [
+          { text: 've' },
+          { text: 're' }
+        ]
+      }
+    })
+  </script>
+</body>
+</html>
