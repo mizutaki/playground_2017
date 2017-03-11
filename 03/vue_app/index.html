@@ -42,28 +42,52 @@
     </ul>
     <h4>4th week</h4>
     <div id="app-4">
-    <ul>
-      <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
-    </ul>
-  </div>
-  <script>
-    var test = Vue.extend({
-      template: '<label>target<input type="text" /></label>\
-      <label>action<input type="text" /></label>'
-    })
-    Vue.component('todo-item', {
-      props: ['todo'],
-      template: '<li>{{ todo.text }}</li>'
-    })
-    var app4 = new Vue({
-      el: '#app-4',
-      data: {
-        groceryList: [
-          { text: 've' },
-          { text: 're' }
+      <input-form v-bind:add-text="addText" v-bind:target="targetText" v-bind:action="actionText"></input-form>
+      <ul>
+        <todo-list v-bind:target-text="targetText" v-bind:action-text="actionText"></todo-list>
+      </ul>
+    </div>
+    <script>
+      var todoList = {
+        template: '<li><p><label>target：</label>{{ targetText }}</p><p><label>action：</label>{{ actionText }}</p></li>',
+        props: [
+          'targetText',
+          'actionText'
         ]
       }
-    })
-  </script>
+      var inputForm = Vue.component('input-form', {
+        template: '<div>\
+        <label>target<input v-model="target" type="text" /></label>\
+        <label>action<input v-model="action" type="text" /></label>\
+        <button v-on:click="button_click">add</button></div>',
+        props: [
+          'target',
+          'action',
+          'addText'
+        ],
+        methods: {
+          button_click: function(event) {
+            this.addText(event, this.target, this.action)
+          }
+        }
+      })
+      var app4 = new Vue({
+        el: '#app-4',
+        components: {
+          todoList: todoList,
+          inputForm: inputForm
+        },
+        data: {
+          targetText: 'aa',
+          actionText: 'bb'
+        },
+        methods: {
+          addText: function(event, newTarget, newAction) {
+            this.targetText = newTarget
+            this.actionText = newAction
+          }
+        }
+      })
+    </script>
 </body>
 </html>
