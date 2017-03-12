@@ -44,21 +44,24 @@
     <div id="app-4">
       <input-form v-bind:add-text="addText" v-bind:target="targetText" v-bind:action="actionText"></input-form>
       <ul>
-        <todo-list v-bind:target-text="targetText" v-bind:action-text="actionText"></todo-list>
+        <todo-list v-for="task in taskList" v-bind:task="task" v-bind:target-text="targetText" v-bind:action-text="actionText"></todo-list>
       </ul>
     </div>
     <script>
       var todoList = {
-        template: '<li><p><label>target：</label>{{ targetText }}</p><p><label>action：</label>{{ actionText }}</p></li>',
+        template: '<li>\
+        <p><label>target：</label>{{ task.targetText }}</p>\
+        <p><label>action：</label>{{ task.actionText }}</p></li>',
         props: [
           'targetText',
-          'actionText'
+          'actionText',
+          'task'
         ]
       }
       var inputForm = Vue.component('input-form', {
         template: '<div>\
-        <label>target<input v-model="target" type="text" /></label>\
-        <label>action<input v-model="action" type="text" /></label>\
+        <label>target：<input v-model="target" type="text" /></label>\
+        <label>action：<input v-model="action" type="text" /></label>\
         <button v-on:click="button_click">add</button></div>',
         props: [
           'target',
@@ -78,13 +81,18 @@
           inputForm: inputForm
         },
         data: {
-          targetText: 'aa',
-          actionText: 'bb'
+          targetText: '',
+          actionText: '',
+          taskList: []
         },
         methods: {
           addText: function(event, newTarget, newAction) {
-            this.targetText = newTarget
-            this.actionText = newAction
+            this.taskList.push({
+              targetText: newTarget,
+              actionText: newAction
+            })
+            this.targetText = ''
+            this.actionText = ''
           }
         }
       })
