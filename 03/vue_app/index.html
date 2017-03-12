@@ -44,19 +44,33 @@
     <div id="app-4">
       <input-form v-bind:add-text="addText" v-bind:target="targetText" v-bind:action="actionText"></input-form>
       <ul>
-        <todo-list v-for="task in taskList" v-bind:task="task" v-bind:target-text="targetText" v-bind:action-text="actionText"></todo-list>
+        <todo-list v-for="(task, index) in taskList"
+                   v-bind:task="task"
+                   v-bind:index="index"
+                   v-bind:target-text="targetText"
+                   v-bind:action-text="actionText">
+        </todo-list>
       </ul>
     </div>
     <script>
+      var eventHub = new Vue()
       var todoList = {
         template: '<li>\
         <p><label>target：</label>{{ task.targetText }}</p>\
-        <p><label>action：</label>{{ task.actionText }}</p></li>',
+        <p><label>action：</label>{{ task.actionText }}</p>\
+        <button v-on:click="delete_click">delete</button></li>',
         props: [
           'targetText',
           'actionText',
-          'task'
-        ]
+          'task',
+          'index',
+        ],
+        methods: {
+          delete_click: function() {
+            console.log("delete_click");
+            eventHub.$emit('delete-text', this.index)
+          }
+        }
       }
       var inputForm = Vue.component('input-form', {
         template: '<div>\
@@ -83,16 +97,28 @@
         data: {
           targetText: '',
           actionText: '',
-          taskList: []
+          taskList: [],
+          index: 0
+        },
+        created: function() {
+          eventHub.$on('delete-text', this.deleteText)
         },
         methods: {
           addText: function(event, newTarget, newAction) {
             this.taskList.push({
+              id: this.index,
               targetText: newTarget,
               actionText: newAction
             })
+            this.index += 1
             this.targetText = ''
             this.actionText = ''
+          },
+          deleteText: function(id) {
+            this.index -= 1
+            this.taskList = this.taskList.filter(function(task) {
+              return task.id !== id
+            })
           }
         }
       })
