@@ -42,6 +42,7 @@
     </ul>
     <h4>4th week</h4>
     <div id="app-4">
+      <p v-bind:total-task="totalTask">task：{{ totalTask  }}</p>
       <input-form v-bind:add-text="addText" v-bind:target="targetText" v-bind:action="actionText"></input-form>
       <ul>
         <todo-list v-for="(task, index) in taskList"
@@ -98,7 +99,8 @@
           targetText: '',
           actionText: '',
           taskList: [],
-          index: 0
+          index: 0,
+          totalTask: 0
         },
         created: function() {
           eventHub.$on('delete-text', this.deleteText)
@@ -111,11 +113,13 @@
               actionText: newAction
             })
             this.index += 1
+            this.totalTask += 1
             this.targetText = ''
             this.actionText = ''
           },
           deleteText: function(id) {
             this.index -= 1
+            this.totalTask -= 1
             this.taskList = this.taskList.filter(function(task) {
               return task.id !== id
             })
