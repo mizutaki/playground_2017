@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <script src="https://unpkg.com/vue"></script>
+  <link rel="stylesheet" href="index.css">
   <title>Swing</title>
 </head>
 <body>
@@ -50,7 +51,9 @@
                    v-bind:task="task"
                    v-bind:index="index"
                    v-bind:target-text="targetText"
-                   v-bind:action-text="actionText">
+                   v-bind:action-text="actionText"
+                   v-bind:is-done="isDone"
+                   >
         </todo-list>
       </ul>
     </div>
@@ -58,19 +61,24 @@
       var eventHub = new Vue()
       var todoList = {
         template: '<li>\
-        <p><label>target：</label>{{ task.targetText }}</p>\
-        <p><label>action：</label>{{ task.actionText }}</p>\
+        <p v-bind:class="{done: isDone}"><label>target：</label>{{ task.targetText }}</p>\
+        <p v-bind:class="{done: isDone}"><label>action：</label>{{ task.actionText }}</p>\
+        <button v-on:click="done_click">done</button>\
         <button v-on:click="delete_click">delete</button></li>',
         props: [
           'targetText',
           'actionText',
           'task',
           'index',
+          'isDone'
         ],
         methods: {
           delete_click: function() {
             console.log("delete_click");
             eventHub.$emit('delete-text', this.index)
+          },
+          done_click: function() {
+            this.isDone = !this.isDone
           }
         }
       }
