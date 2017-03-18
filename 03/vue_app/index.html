@@ -43,8 +43,9 @@
     <h4>4th week</h4>
     <div id="app-4">
       <p v-bind:total-task="totalTask">task：{{ totalTask  }}</p>
+      <span v-if="totalTask > 0" v-on:click="toggle">[{{ open ? '-' : '+' }}]</span>
       <input-form v-bind:add-text="addText" v-bind:target="targetText" v-bind:action="actionText"></input-form>
-      <ul>
+      <ul v-show="open">
         <todo-list v-for="(task, index) in taskList"
                    v-bind:task="task"
                    v-bind:index="index"
@@ -100,7 +101,8 @@
           actionText: '',
           taskList: [],
           index: 0,
-          totalTask: 0
+          totalTask: 0,
+          open: true
         },
         created: function() {
           eventHub.$on('delete-text', this.deleteText)
@@ -123,6 +125,9 @@
             this.taskList = this.taskList.filter(function(task) {
               return task.id !== id
             })
+          },
+          toggle: function() {
+            this.open = !this.open
           }
         }
       })
