@@ -58,6 +58,16 @@
       </ul>
     </div>
     <script>
+      var STORAGE_KEY = 'tasks-vuejs-2.0'
+      var storage = {
+        fetch: function() {
+          var tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+          return tasks
+        },
+        save: function(tasks) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
+        }
+      }
       var eventHub = new Vue()
       var todoList = {
         template: '<li>\
@@ -107,13 +117,18 @@
         data: {
           targetText: '',
           actionText: '',
-          taskList: [],
+          taskList: storage.fetch(),
           index: 0,
           totalTask: 0,
           open: true
         },
         created: function() {
           eventHub.$on('delete-text', this.deleteText)
+        },
+        watch: {
+          taskList: function(tasks) {
+              storage.save(tasks)
+          }
         },
         methods: {
           addText: function(event, newTarget, newAction) {
