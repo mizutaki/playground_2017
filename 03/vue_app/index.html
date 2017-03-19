@@ -119,7 +119,7 @@
           actionText: '',
           taskList: storage.fetch(),
           index: 0,
-          totalTask: 0,
+          totalTask: storage.fetch().length,
           open: true
         },
         created: function() {
