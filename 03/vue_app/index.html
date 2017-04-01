@@ -68,12 +68,14 @@
       var eventHub = new Vue()
       var todoList = {
         template: '<li>\
-        <div class="view">\
-        <p v-bind:class="{done: isDone}"　@dblclick="target_double_click"><label>target：</label>{{ task.targetText }}</p>\
+        <p v-bind:class="{done: isDone}"　@dblclick="target_double_click">\
+        <label>target：</label><span class="view">{{ task.targetText }}</span>\
+        <input class="edit" v-model="task.targetText" @keyup.enter="edit_keyup(task)" type="text" />\
+        </p>\
+        </div>\
         <p v-bind:class="{done: isDone}"><label>action：</label>{{ task.actionText }}</p>\
         <button @click="done_click">done</button>\
-        <button v-on:click="delete_click">delete</button></div>\
-        <input class="edit" v-model="task.targetText" @keyup.enter="edit_keyup(task)" type="text" />\
+        <button v-on:click="delete_click">delete</button>\
         </li>',
         props: [
           'task',
