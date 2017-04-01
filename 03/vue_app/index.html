@@ -46,12 +46,10 @@
       <p v-bind:total-task="totalTask">task：{{ totalTask  }}</p>
       <span v-if="totalTask > 0" v-on:click="toggle">[{{ open ? '-' : '+' }}]</span>
       <input-form v-bind:add-text="addText" v-bind:target="targetText" v-bind:action="actionText"></input-form>
-      <ul v-show="open">
+      <ul v-show="open" class="task-list">
         <todo-list v-for="(task, index) in taskList"
                    v-bind:task="task"
-                   v-bind:index="index"
-                   v-bind:target-text="targetText"
-                   v-bind:action-text="actionText"
+                   :class="{ editing: task == editedTask }"
                    >
         </todo-list>
       </ul>
@@ -70,13 +68,14 @@
       var eventHub = new Vue()
       var todoList = {
         template: '<li>\
-        <p v-bind:class="{done: isDone}"><label>target：</label>{{ task.targetText }}</p>\
+        <div class="view">\
+        <p v-bind:class="{done: isDone}"　@dblclick="target_double_click"><label>target：</label>{{ task.targetText }}</p>\
         <p v-bind:class="{done: isDone}"><label>action：</label>{{ task.actionText }}</p>\
-        <button v-on:click="done_click">done</button>\
-        <button v-on:click="delete_click">delete</button></li>',
+        <button @click="done_click">done</button>\
+        <button v-on:click="delete_click">delete</button></div>\
+        <input class="edit" v-model="task.targetText" @keyup.enter="edit_keyup(task)" type="text" />\
+        </li>',
         props: [
-          'targetText',
-          'actionText',
           'task',
           'index',
           'isDone'
@@ -88,6 +87,12 @@
           },
           done_click: function() {
             this.isDone = !this.isDone
+          },
+          target_double_click: function() {
+            eventHub.$emit('edit-targettext', this.task)
+          },
+          edit_keyup: function() {
+            eventHub.$emit('edit-done', this.task)
           }
         }
       }
@@ -103,6 +108,7 @@
         ],
         methods: {
           button_click: function(event) {
+            console.log(event);
             this.addText(event, this.target, this.action)
           }
         }
@@ -119,10 +125,13 @@
           taskList: storage.fetch(),
           index: 0,
           totalTask: storage.fetch().length,
-          open: true
+          open: true,
+          editedTask: null
         },
         created: function() {
-          eventHub.$on('delete-text', this.deleteText)
+          eventHub.$on('delete-text', this.deleteText),
+          eventHub.$on('edit-targettext', this.editTargetText),
+          eventHub.$on('edit-done', this.editDone)
         },
         watch: {
           taskList: function(tasks) {
@@ -150,6 +159,18 @@
           },
           toggle: function() {
             this.open = !this.open
+          },
+          editTargetText: function(task) {
+            this.beforeEditCache = task.actionText
+            this.editedTask = task
+          },
+          editDone: function(task) {
+            if (!this.editedTask) {
+              return;
+            }
+            this.editedTask = null;
+            task.targetText = task.targetText
+            console.log("doneEdit")
           }
         }
       })
