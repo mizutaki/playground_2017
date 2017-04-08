@@ -145,7 +145,7 @@
         },
         watch: {
           taskList: function(tasks) {
-              storage.save(tasks)
+            storage.save(tasks)
           }
         },
         methods: {
@@ -171,11 +171,6 @@
             this.open = !this.open
           },
           editDone: function(task) {
-            if (!this.editedTask) {
-              return;
-            }
-            this.editedTask = null;
-            task.targetText = task.targetText
             console.log("doneEdit")
           }
         }
