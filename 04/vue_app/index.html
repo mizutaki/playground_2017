@@ -29,6 +29,7 @@
       <ul v-show="open" class="task-list">
         <todo-list v-for="(task, index) in taskList"
                    v-bind:task="task"
+                   v-bind:delete-text="deleteText"
                    >
         </todo-list>
       </ul>
@@ -41,6 +42,7 @@
       <ul v-show="open" class="task-list">
         <todo-list v-for="(task, index) in taskList"
                    v-bind:task="task"
+                   v-bind:delete-text="deleteText"
                    >
         </todo-list>
       </ul>
@@ -53,6 +55,7 @@
       <ul v-show="open" class="task-list">
         <todo-list v-for="(task, index) in taskList"
                    v-bind:task="task"
+                   v-bind:delete-text="deleteText"
                    >
         </todo-list>
       </ul>
@@ -65,6 +68,7 @@
       <ul v-show="open" class="task-list">
         <todo-list v-for="(task, index) in taskList"
                    v-bind:task="task"
+                   v-bind:delete-text="deleteText"
                    >
         </todo-list>
       </ul>
@@ -77,6 +81,17 @@
         },
         save: function(key, tasks) {
           localStorage.setItem(key, JSON.stringify(tasks))
+        },
+        getCurrentId: function(key) {
+          var tasks = JSON.parse(localStorage.getItem(key) || '[]')
+          var id = 0
+          tasks.map(function(task) {
+            if (id < task.id) {
+              id = task.id
+            }
+          })
+          console.log(id);
+          return id
         }
       }
       var eventHub = new Vue()
@@ -98,12 +113,12 @@
           'index',
           'isDone',
           'isTargetEdit',
-          'isActionEdit'
+          'isActionEdit',
+          'deleteText'
         ],
         methods: {
           delete_click: function() {
-            console.log("delete_click");
-            eventHub.$emit('delete-text', this.index)
+            this.deleteText(this.task.id)
           },
           done_click: function() {
             this.isDone = !this.isDone
@@ -115,7 +130,6 @@
             this.isActionEdit = true
           },
           edit_keyup: function() {
-            console.log("aa");
             this.isTargetEdit = false
             this.isActionEdit = false
             eventHub.$emit('edit-done', this.task)
@@ -152,14 +166,13 @@
             targetText: '',
             actionText: '',
             taskList: storage.fetch(STORAGE_KEY1),
-            index: 0,
+            index: storage.getCurrentId(STORAGE_KEY1),
             totalTask: storage.fetch(STORAGE_KEY1).length,
             open: true,
             editedTask: null,
           }
         },
         created: function() {
-          eventHub.$on('delete-text', this.deleteText),
           eventHub.$on('edit-done', this.editDone)
         },
         watch: {
@@ -169,13 +182,11 @@
         },
         methods: {
           addText: function(event, newTarget, newAction) {
-            console.log(this.index);
             this.taskList.push({
-              id: this.index,
+              id: this.index +=1,
               targetText: newTarget,
               actionText: newAction
             })
-            this.index += 1
             console.log(this.index);
             this.totalTask += 1
             app0.totalTask += 1
@@ -183,7 +194,6 @@
             this.actionText = ''
           },
           deleteText: function(id) {
-            this.index -= 1
             this.totalTask -= 1
             app0.totalTask -= 1
             this.taskList = this.taskList.filter(function(task) {
@@ -210,14 +220,13 @@
             targetText: '',
             actionText: '',
             taskList: storage.fetch(STORAGE_KEY2),
-            index: 0,
+            index: storage.getCurrentId(STORAGE_KEY2),
             totalTask: storage.fetch(STORAGE_KEY2).length,
             open: true,
             editedTask: null,
           }
         },
         created: function() {
-          eventHub.$on('delete-text', this.deleteText),
           eventHub.$on('edit-done', this.editDone)
         },
         watch: {
@@ -228,130 +237,17 @@
         methods: {
           addText: function(event, newTarget, newAction) {
             this.taskList.push({
-              id: this.index,
+              id: this.index +=1,
               targetText: newTarget,
               actionText: newAction
             })
-            this.index += 1
+            console.log(this.index);
             this.totalTask += 1
             app0.totalTask += 1
             this.targetText = ''
             this.actionText = ''
           },
           deleteText: function(id) {
-            this.index -= 1
-            this.totalTask -= 1
-            app0.totalTask -= 1
-            this.taskList = this.taskList.filter(function(task) {
-              return task.id !== id
-            })
-          },
-          toggle: function() {
-            this.open = !this.open
-          },
-          editDone: function(task) {
-            console.log("doneEdit")
-          }
-        }
-      })
-      var STORAGE_KEY3 = '3week-tasks'
-      var app3 = new Vue({
-        el: '#app-3',
-        components: {
-          todoList: todoList,
-          inputForm: inputForm
-        },
-        data: function() {
-          return {
-            targetText: '',
-            actionText: '',
-            taskList: storage.fetch(STORAGE_KEY3),
-            index: 0,
-            totalTask: storage.fetch(STORAGE_KEY3).length,
-            open: true,
-            editedTask: null,
-          }
-        },
-        created: function() {
-          eventHub.$on('delete-text', this.deleteText),
-          eventHub.$on('edit-done', this.editDone)
-        },
-        watch: {
-          taskList: function(tasks) {
-            storage.save(STORAGE_KEY3, tasks)
-          }
-        },
-        methods: {
-          addText: function(event, newTarget, newAction) {
-            this.taskList.push({
-              id: this.index,
-              targetText: newTarget,
-              actionText: newAction
-            })
-            this.index += 1
-            this.totalTask += 1
-            app0.totalTask += 1
-            this.targetText = ''
-            this.actionText = ''
-          },
-          deleteText: function(id) {
-            this.index -= 1
-            this.totalTask -= 1
-            app0.totalTask -= 1
-            this.taskList = this.taskList.filter(function(task) {
-              return task.id !== id
-            })
-          },
-          toggle: function() {
-            this.open = !this.open
-          },
-          editDone: function(task) {
-            console.log("doneEdit")
-          }
-        }
-      })
-      var STORAGE_KEY4 = '4week-tasks'
-      var app4 = new Vue({
-        el: '#app-4',
-        components: {
-          todoList: todoList,
-          inputForm: inputForm
-        },
-        data: function() {
-          return {
-            targetText: '',
-            actionText: '',
-            taskList: storage.fetch(STORAGE_KEY4),
-            index: 0,
-            totalTask: storage.fetch(STORAGE_KEY4).length,
-            open: true,
-            editedTask: null,
-          }
-        },
-        created: function() {
-          eventHub.$on('delete-text', this.deleteText),
-          eventHub.$on('edit-done', this.editDone)
-        },
-        watch: {
-          taskList: function(tasks) {
-            storage.save(STORAGE_KEY4, tasks)
-          }
-        },
-        methods: {
-          addText: function(event, newTarget, newAction) {
-            this.taskList.push({
-              id: this.index,
-              targetText: newTarget,
-              actionText: newAction
-            })
-            this.index += 1
-            this.totalTask += 1
-            app0.totalTask += 1
-            this.targetText = ''
-            this.actionText = ''
-          },
-          deleteText: function(id) {
-            this.index -= 1
             this.totalTask -= 1
             app0.totalTask -= 1
             this.taskList = this.taskList.filter(function(task) {
@@ -370,7 +266,7 @@
         el: '#app-0',
         data:function() {
           return {
-            totalTask: app1.totalTask + app2.totalTask + app3.totalTask + app4.totalTask
+            totalTask: app1.totalTask + app2.totalTask
           }
         }
       })
