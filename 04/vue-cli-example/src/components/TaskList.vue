@@ -25,6 +25,11 @@ export default {
     'isActionEdit',
     'deleteText'
   ],
+  data: function () {
+    return {
+      taskList: []
+    }
+  },
   methods: {
     delete_click: function () {
       this.deleteText(this.task.id)
