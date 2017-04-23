@@ -54,8 +54,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#app-1 {
+li {
+  list-style: none;
   padding-left: 50px;
+  border-bottom: 1px dotted #42b983; 
 }
 .done {
   text-decoration: line-through;
