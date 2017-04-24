@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="app-1">
-      <GoalForm></GoalForm>
+      <GoalForm ></GoalForm>
       <InputForm v-bind:storageKey="'1week-tasks'" v-bind:title="'1st week'"></InputForm>
       <InputForm v-bind:storageKey="'2week-tasks'" v-bind:title="'2nd week'"></InputForm>
     </div>

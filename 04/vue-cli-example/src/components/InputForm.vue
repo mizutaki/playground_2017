@@ -63,7 +63,6 @@ export default {
   watch: {
     taskList: function (tasks) {
       storage.save(this.storageKey, tasks)
-      this.totalTask += 1
     }
   },
   methods: {
@@ -72,6 +71,7 @@ export default {
       console.log(this.action)
       console.log(event)
       this.index += 1
+      this.totalTask += 1
       this.taskList.push({
         id: this.index,
         targetText: this.target,
@@ -85,6 +85,7 @@ export default {
       this.taskList = this.taskList.filter(function (task) {
         return task.id !== id
       })
+      this.totalTask = this.taskList.length
     },
     toggle: function () {
       this.open = !this.open
