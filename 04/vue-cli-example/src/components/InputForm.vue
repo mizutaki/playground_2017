@@ -60,6 +60,10 @@ export default {
       open: true
     }
   },
+  created: function () {
+    // 初期化処理
+    this.$parent.totalTask += storage.fetch(this.storageKey).length
+  },
   watch: {
     taskList: function (tasks) {
       storage.save(this.storageKey, tasks)
@@ -67,11 +71,7 @@ export default {
   },
   methods: {
     addText: function (event) {
-      console.log(this.target)
-      console.log(this.action)
-      console.log(event)
       this.index += 1
-      this.totalTask += 1
       this.taskList.push({
         id: this.index,
         targetText: this.target,
@@ -79,16 +79,24 @@ export default {
       })
       this.target = ''
       this.action = ''
+      this._increaseTaskCount()
     },
     deleteText: function (id) {
-      console.log(id)
       this.taskList = this.taskList.filter(function (task) {
         return task.id !== id
       })
-      this.totalTask = this.taskList.length
+      this._decreaseTaskCount()
     },
     toggle: function () {
       this.open = !this.open
+    },
+    _increaseTaskCount: function () {
+      this.totalTask += 1
+      this.$parent.totalTask += 1
+    },
+    _decreaseTaskCount: function () {
+      this.totalTask -= 1
+      this.$parent.totalTask -= 1
     }
   }
 }
