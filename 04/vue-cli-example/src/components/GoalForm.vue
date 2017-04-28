@@ -3,15 +3,18 @@
     <h1>1 month</h1>
     <label for="">goal：<input v-model="inputGoal" type="text" size="40" /></label>
     <button v-on:click="add">add</button>
-    <progress value="0" max="100">0%</progress>
+    <progress v-bind:value="percent" max="100"></progress><span>{{percent}}%</span>
     <h2>goal：{{ goal }}</h2>
+    <p>total[{{totalTask}}]task</p>
   </div>
 </template>
 
 <script>
 export default {
   props: [
-    'inputGoal'
+    'inputGoal',
+    'totalTask',
+    'percent'
   ],
   data: function () {
     return {

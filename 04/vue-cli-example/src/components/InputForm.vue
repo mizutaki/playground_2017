@@ -57,7 +57,9 @@ export default {
       taskList: storage.fetch(this.storageKey),
       index: storage.getCurrentId(this.storageKey),
       totalTask: storage.fetch(this.storageKey).length,
-      open: true
+      open: true,
+      totalCompleteTask: 0,
+      percent: 0
     }
   },
   created: function () {
@@ -67,6 +69,10 @@ export default {
   watch: {
     taskList: function (tasks) {
       storage.save(this.storageKey, tasks)
+    },
+    totalCompleteTask: function (a) {
+      this.$parent.totalCompleteTask += a
+      this.$parent.percent = this.$parent.totalCompleteTask / this.$parent.totalTask * 100
     }
   },
   methods: {

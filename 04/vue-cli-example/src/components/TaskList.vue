@@ -36,6 +36,11 @@ export default {
     },
     done_click: function () {
       this.isDone = !this.isDone
+      if (this.isDone === true) {
+        this.$parent.totalCompleteTask = 1
+      } else {
+        this.$parent.totalCompleteTask = -1
+      }
     },
     target_double_click: function () {
       this.isTargetEdit = true
@@ -57,7 +62,7 @@ export default {
 li {
   list-style: none;
   padding-left: 50px;
-  border-bottom: 1px dotted #42b983; 
+  border-bottom: 1px dotted #42b983;
 }
 .done {
   text-decoration: line-through;
