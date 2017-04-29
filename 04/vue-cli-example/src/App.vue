@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="app-1">
-      <GoalForm :totalTask="totalTask" v-bind:percent="percent"></GoalForm>
+      <Subject :totalTask="totalTask" v-bind:progressRate="progressRate"></Subject>
       <InputForm v-bind:storageKey="'1week-tasks'" v-bind:title="'1st week'"></InputForm>
       <InputForm v-bind:storageKey="'2week-tasks'" v-bind:title="'2nd week'"></InputForm>
     </div>
@@ -9,13 +9,13 @@
 </template>
 
 <script>
+import Subject from './components/Subject'
 import InputForm from './components/InputForm'
-import GoalForm from './components/GoalForm'
 export default {
   name: 'app',
   components: {
-    InputForm,
-    GoalForm
+    Subject,
+    InputForm
   },
   data: function () {
     return {
@@ -23,7 +23,7 @@ export default {
       actionText: '',
       totalTask: 0,
       totalCompleteTask: 0,
-      percent: 0
+      progressRate: 0
     }
   }
 }
@@ -32,9 +32,6 @@ export default {
 <style>
 #app {
   color: #2c3e50;
-  margin-top: 60px;
-}
-#app img {
-  text-align: center;
+  margin-top: 30px;
 }
 </style>
