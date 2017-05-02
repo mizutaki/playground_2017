@@ -58,8 +58,7 @@ export default {
       index: storage.getCurrentId(this.storageKey),
       totalTask: storage.fetch(this.storageKey).length,
       open: true,
-      totalCompleteTask: 0,
-      percent: 0
+      totalCompleteTask: 0
     }
   },
   created: function () {
@@ -72,7 +71,7 @@ export default {
     },
     totalCompleteTask: function (a) {
       this.$parent.totalCompleteTask += a
-      this.$parent.percent = this.$parent.totalCompleteTask / this.$parent.totalTask * 100
+      this.$parent.progressRate = this.$parent.totalCompleteTask / this.$parent.totalTask * 100
     }
   },
   methods: {
