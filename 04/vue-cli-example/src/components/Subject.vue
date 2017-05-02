@@ -19,13 +19,13 @@
 <script>
 export default {
   props: [
-    'inputSubject',
     'totalTask',
     'progressRate'
   ],
   data: function () {
     return {
-      subject: ''
+      subject: '',
+      inputSubject: ''
     }
   },
   methods: {

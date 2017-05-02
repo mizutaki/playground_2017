@@ -1,57 +1,108 @@
 <template>
-  <li>
-    <p v-bind:class="{done: isDone, targetEditing: isTargetEdit}" @dblclick="target_double_click">
-      <label>target：</label>
-      <span class="view">{{ task.targetText }}</span>
-      <input class="edit" v-model="task.targetText" @keyup.enter="edit_keyup(task)" type="text" />
-    </p>
-    <p v-bind:class="{done: isDone, actionEditing: isActionEdit}" @dblclick="action_double_click">
-      <label>action：</label>
-      <span class="view">{{ task.actionText }}</span>
-      <input class="edit" v-model="task.actionText" @keyup.enter="edit_keyup(task)" type="text" />
-    </p>
-    <button @click="done_click">done</button>
-    <button v-on:click="delete_click">delete</button>
-  </li>
+  <div class="week">
+    <h4>{{ title }}</h4>
+    <div>
+      <p>[{{totalTask}}]task</p>
+      <span v-if="totalTask > 0" v-on:click="toggle">[{{ open ? '-' : '+' }}]</span>
+      <label>target：<input v-model="target" type="text" size="40" /></label>
+      <label>action：<input v-model="action" type="text" size="40" /></label>
+      <button v-on:click="addText">add</button>
+    </div>
+    <ul v-show="open">
+      <Task v-for="(task, index) in taskList"
+                 v-bind:task="task"
+                 v-bind:delete-text="deleteText"
+                 >
+      </Task>
+    </ul>
+  </div>
 </template>
 
 <script>
+import Task from './Task'
+
+const storage = {
+  fetch: function (key) {
+    var tasks = JSON.parse(localStorage.getItem(key) || '[]')
+    return tasks
+  },
+  save: function (key, tasks) {
+    localStorage.setItem(key, JSON.stringify(tasks))
+  },
+  getCurrentId: function (key) {
+    var tasks = JSON.parse(localStorage.getItem(key) || '[]')
+    var id = 0
+    tasks.map(function (task) {
+      if (id < task.id) {
+        id = task.id
+      }
+    })
+    console.log(id)
+    return id
+  }
+}
+
 export default {
   props: [
-    'task',
-    'index',
-    'isDone',
-    'isTargetEdit',
-    'isActionEdit',
-    'deleteText'
+    'storageKey',
+    'title'
   ],
+  components: {
+    Task
+  },
   data: function () {
     return {
-      taskList: []
+      target: '',
+      action: '',
+      taskList: storage.fetch(this.storageKey),
+      index: storage.getCurrentId(this.storageKey),
+      totalTask: storage.fetch(this.storageKey).length,
+      open: true,
+      totalCompleteTask: 0,
+      percent: 0
+    }
+  },
+  created: function () {
+    // 初期化処理
+    this.$parent.totalTask += storage.fetch(this.storageKey).length
+  },
+  watch: {
+    taskList: function (tasks) {
+      storage.save(this.storageKey, tasks)
+    },
+    totalCompleteTask: function (a) {
+      this.$parent.totalCompleteTask += a
+      this.$parent.percent = this.$parent.totalCompleteTask / this.$parent.totalTask * 100
     }
   },
   methods: {
-    delete_click: function () {
-      this.deleteText(this.task.id)
+    addText: function (event) {
+      this.index += 1
+      this.taskList.push({
+        id: this.index,
+        targetText: this.target,
+        actionText: this.action
+      })
+      this.target = ''
+      this.action = ''
+      this._increaseTaskCount()
     },
-    done_click: function () {
-      this.isDone = !this.isDone
-      if (this.isDone === true) {
-        this.$parent.totalCompleteTask = 1
-      } else {
-        this.$parent.totalCompleteTask = -1
-      }
+    deleteText: function (id) {
+      this.taskList = this.taskList.filter(function (task) {
+        return task.id !== id
+      })
+      this._decreaseTaskCount()
     },
-    target_double_click: function () {
-      this.isTargetEdit = true
+    toggle: function () {
+      this.open = !this.open
     },
-    action_double_click: function () {
-      this.isActionEdit = true
+    _increaseTaskCount: function () {
+      this.totalTask += 1
+      this.$parent.totalTask += 1
     },
-    edit_keyup: function () {
-      this.isTargetEdit = false
-      this.isActionEdit = false
-      // eventHub.$emit('edit-done', this.task)
+    _decreaseTaskCount: function () {
+      this.totalTask -= 1
+      this.$parent.totalTask -= 1
     }
   }
 }
@@ -59,58 +110,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-li {
-  list-style: none;
+.message {
+  color: #42b983;
+}
+h4 {
+  text-align: left;
+  border-bottom: 1px solid #42b983;
+}
+.week {
   padding-left: 50px;
-  border-bottom: 1px dotted #42b983;
-}
-.done {
-  text-decoration: line-through;
-  background-color: #b0c4de;
-}
-.edit {
-  position: relative;
-  margin: 0;
-  width: 100%;
-  font-family: inherit;
-  font-weight: inherit;
-  border: 0;
-  outline: none;
-  color: inherit;
-  padding: 6px;
-  border: 1px solid #999;
-  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-}
-li .targetEditing {
-  border-bottom: none;
-  padding: 0;
-}
-li .targetEditing .edit {
-  display: block;
-  width: 506px;
-  margin: 0 0 0 43px;
-}
-li .targetEditing .view {
-  display: none;
-}
-li .actionEditing {
-  border-bottom: none;
-  padding: 0;
-}
-li .actionEditing .edit {
-  display: block;
-  width: 506px;
-  margin: 0 0 0 43px;
-}
-li .actionEditing .view {
-  display: none;
-}
-li .edit {
-  display: none;
 }
 
 </style>
