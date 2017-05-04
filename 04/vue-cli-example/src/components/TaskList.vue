@@ -49,8 +49,8 @@ export default {
     taskList: function (tasks) {
       save(this.storageKey, tasks)
     },
-    totalCompleteTask: function (a) {
-      this.$parent.totalCompleteTask += a
+    totalCompleteTask: function () {
+      this.$parent.totalCompleteTask = this.totalCompleteTask
       this.$parent.progressRate = this.$parent.totalCompleteTask / this.$parent.totalTask * 100
     }
   },

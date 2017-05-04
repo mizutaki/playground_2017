@@ -35,11 +35,14 @@ export default {
       this.deleteText(this.task.id)
     },
     done_click: function () {
+      console.log(this.isDone)
       this.isDone = !this.isDone
       if (this.isDone === true) {
-        this.$parent.totalCompleteTask = 1
+        console.log('1')
+        this.$parent.totalCompleteTask += 1
       } else {
-        this.$parent.totalCompleteTask = -1
+        console.log('2')
+        this.$parent.totalCompleteTask -= 1
       }
     },
     target_double_click: function () {
