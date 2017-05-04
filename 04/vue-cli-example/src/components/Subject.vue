@@ -12,11 +12,12 @@
     <p>total_task[{{totalTask}}]</p>
     <label>subject：<input v-model="inputSubject" type="text" size="40" /></label>
     <button v-on:click="add">add</button>
-
   </div>
 </template>
 
 <script>
+import { fetchSubject, save } from '../storage'
+const storageKey = 'subject'
 export default {
   props: [
     'totalTask',
@@ -28,9 +29,14 @@ export default {
       inputSubject: ''
     }
   },
+  created: function () {
+    var subject = fetchSubject(storageKey)
+    this.subject = subject
+  },
   methods: {
     add: function () {
       this.subject = this.inputSubject
+      save(storageKey, this.subject)
       this.inputSubject = ''
     }
   }

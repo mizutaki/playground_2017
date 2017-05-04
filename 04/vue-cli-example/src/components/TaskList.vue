@@ -20,27 +20,7 @@
 
 <script>
 import Task from './Task'
-
-const storage = {
-  fetch: function (key) {
-    var tasks = JSON.parse(localStorage.getItem(key) || '[]')
-    return tasks
-  },
-  save: function (key, tasks) {
-    localStorage.setItem(key, JSON.stringify(tasks))
-  },
-  getCurrentId: function (key) {
-    var tasks = JSON.parse(localStorage.getItem(key) || '[]')
-    var id = 0
-    tasks.map(function (task) {
-      if (id < task.id) {
-        id = task.id
-      }
-    })
-    console.log(id)
-    return id
-  }
-}
+import { fetch, save, getCurrentId } from '../storage'
 
 export default {
   props: [
@@ -54,20 +34,20 @@ export default {
     return {
       target: '',
       action: '',
-      taskList: storage.fetch(this.storageKey),
-      index: storage.getCurrentId(this.storageKey),
-      totalTask: storage.fetch(this.storageKey).length,
+      taskList: fetch(this.storageKey),
+      index: getCurrentId(this.storageKey),
+      totalTask: fetch(this.storageKey).length,
       open: true,
       totalCompleteTask: 0
     }
   },
   created: function () {
     // 初期化処理
-    this.$parent.totalTask += storage.fetch(this.storageKey).length
+    this.$parent.totalTask += fetch(this.storageKey).length
   },
   watch: {
     taskList: function (tasks) {
-      storage.save(this.storageKey, tasks)
+      save(this.storageKey, tasks)
     },
     totalCompleteTask: function (a) {
       this.$parent.totalCompleteTask += a
