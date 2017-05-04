@@ -11,7 +11,8 @@
     </div>
     <p>total_task[{{totalTask}}]</p>
     <label>subject：<input v-model="inputSubject" type="text" size="40" /></label>
-    <button v-on:click="add">add</button>
+    <button v-on:click="addSubject">add</button>
+    <button v-on:click="deleteSubject">delete</button>
   </div>
 </template>
 
@@ -34,10 +35,14 @@ export default {
     this.subject = subject
   },
   methods: {
-    add: function () {
+    addSubject: function () {
       this.subject = this.inputSubject
       save(storageKey, this.subject)
       this.inputSubject = ''
+    },
+    deleteSubject: function () {
+      this.subject = ''
+      save(storageKey, '')
     }
   }
 }
