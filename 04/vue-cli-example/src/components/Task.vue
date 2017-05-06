@@ -21,15 +21,15 @@ export default {
   props: [
     'task',
     'index',
-    'isTargetEdit',
-    'isActionEdit',
     'deleteText',
     'storageKey'
   ],
   data: function () {
     return {
       taskList: [],
-      isDone: false
+      isDone: false,
+      isTargetEdit: false,
+      isActionEdit: false
     }
   },
   methods: {

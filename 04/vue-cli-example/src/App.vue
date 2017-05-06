@@ -19,8 +19,6 @@ export default {
   },
   data: function () {
     return {
-      targetText: '',
-      actionText: '',
       totalTask: 0,
       totalCompleteTask: 0,
       progressRate: 0
