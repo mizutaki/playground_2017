@@ -12,6 +12,7 @@
       <Task v-for="(task, index) in taskList"
                  v-bind:task="task"
                  v-bind:delete-text="deleteText"
+                 v-bind:storage-key="storageKey"
                  >
       </Task>
     </ul>
@@ -60,7 +61,8 @@ export default {
       this.taskList.push({
         id: this.index,
         targetText: this.target,
-        actionText: this.action
+        actionText: this.action,
+        isDone: false
       })
       this.target = ''
       this.action = ''

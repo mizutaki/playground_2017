@@ -1,11 +1,11 @@
 <template>
   <li>
-    <p v-bind:class="{done: isDone, targetEditing: isTargetEdit}" @dblclick="target_double_click">
+    <p v-bind:class="{done: task.isDone, targetEditing: isTargetEdit}" @dblclick="target_double_click">
       <label>target：</label>
       <span class="view">{{ task.targetText }}</span>
       <input class="edit" v-model="task.targetText" @keyup.enter="edit_keyup(task)" type="text" />
     </p>
-    <p v-bind:class="{done: isDone, actionEditing: isActionEdit}" @dblclick="action_double_click">
+    <p v-bind:class="{done: task.isDone, actionEditing: isActionEdit}" @dblclick="action_double_click">
       <label>action：</label>
       <span class="view">{{ task.actionText }}</span>
       <input class="edit" v-model="task.actionText" @keyup.enter="edit_keyup(task)" type="text" />
@@ -16,13 +16,15 @@
 </template>
 
 <script>
+import { fetch } from '../storage'
 export default {
   props: [
     'task',
     'index',
     'isTargetEdit',
     'isActionEdit',
-    'deleteText'
+    'deleteText',
+    'storageKey'
   ],
   data: function () {
     return {
@@ -35,15 +37,22 @@ export default {
       this.deleteText(this.task.id)
     },
     done_click: function () {
-      console.log(this.isDone)
-      this.isDone = !this.isDone
-      if (this.isDone === true) {
-        console.log('1')
+      this.task.isDone = !this.task.isDone
+      if (this.task.isDone === true) {
         this.$parent.totalCompleteTask += 1
       } else {
-        console.log('2')
         this.$parent.totalCompleteTask -= 1
       }
+      var storageTaskList = fetch(this.storageKey)
+      var id = this.task.id
+      var newTaskList = storageTaskList.map(function (t) {
+        if (t.id === id) {
+          t.isDone = !t.isDone
+          return t
+        }
+        return t
+      })
+      this.$parent.taskList = newTaskList
     },
     target_double_click: function () {
       this.isTargetEdit = true
