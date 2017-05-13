@@ -5,11 +5,12 @@
         <h1>subject：{{ subject }}</h1>
       </div>
       <div class="flex-progress">
+        <p>total{{totalCompleteTask}}/{{totalTask}}</p>
         <progress v-bind:value="progressRate" max="100"></progress>
         <span>{{progressRate}}%</span>
       </div>
     </div>
-    <p>total_task[{{totalTask}}]</p>
+
     <label>subject：<input v-model="inputSubject" type="text" size="40" /></label>
     <button v-on:click="addSubject">add</button>
     <button v-on:click="deleteSubject">delete</button>
@@ -22,7 +23,8 @@ const storageKey = 'subject'
 export default {
   props: [
     'totalTask',
-    'progressRate'
+    'progressRate',
+    'totalCompleteTask'
   ],
   data: function () {
     return {

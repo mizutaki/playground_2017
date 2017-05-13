@@ -13,6 +13,8 @@
                  v-bind:task="task"
                  v-bind:delete-text="deleteText"
                  v-bind:storage-key="storageKey"
+                 v-on:increase="_increaseCompleteTaskCount"
+                 v-on:decrease="_decreaseCompleteTaskCount"
                  >
       </Task>
     </ul>
@@ -49,10 +51,6 @@ export default {
   watch: {
     taskList: function (tasks) {
       save(this.storageKey, tasks)
-    },
-    totalCompleteTask: function () {
-      this.$parent.totalCompleteTask = this.totalCompleteTask
-      this.$parent.progressRate = this.$parent.totalCompleteTask / this.$parent.totalTask * 100
     }
   },
   methods: {
@@ -84,6 +82,14 @@ export default {
     _decreaseTaskCount: function () {
       this.totalTask -= 1
       this.$parent.totalTask -= 1
+    },
+    _increaseCompleteTaskCount: function () {
+      this.totalCompleteTask += 1
+      this.$parent.totalCompleteTask += 1
+    },
+    _decreaseCompleteTaskCount: function () {
+      this.totalCompleteTask -= 1
+      this.$parent.totalCompleteTask -= 1
     }
   }
 }

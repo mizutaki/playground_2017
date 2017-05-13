@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="app-1">
-      <Subject :totalTask="totalTask" v-bind:progressRate="progressRate"></Subject>
+      <Subject :totalTask="totalTask" :totalCompleteTask="totalCompleteTask" v-bind:progressRate="progressRate"></Subject>
       <TaskList v-bind:storageKey="'1week-tasks'" v-bind:title="'1st week'"></TaskList>
       <TaskList v-bind:storageKey="'2week-tasks'" v-bind:title="'2nd week'"></TaskList>
     </div>
@@ -22,6 +22,14 @@ export default {
       totalTask: 0,
       totalCompleteTask: 0,
       progressRate: 0
+    }
+  },
+  watch: {
+    totalTask: function () {
+      this.progressRate = this.totalCompleteTask / this.totalTask * 100
+    },
+    totalCompleteTask: function () {
+      this.progressRate = this.totalCompleteTask / this.totalTask * 100
     }
   }
 }

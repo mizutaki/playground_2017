@@ -39,9 +39,9 @@ export default {
     done_click: function () {
       this.task.isDone = !this.task.isDone
       if (this.task.isDone === true) {
-        this.$parent.totalCompleteTask += 1
+        this.$emit('increase')
       } else {
-        this.$parent.totalCompleteTask -= 1
+        this.$emit('decrease')
       }
       var storageTaskList = fetch(this.storageKey)
       var id = this.task.id
@@ -63,7 +63,6 @@ export default {
     edit_keyup: function () {
       this.isTargetEdit = false
       this.isActionEdit = false
-      // eventHub.$emit('edit-done', this.task)
     }
   }
 }
