@@ -12,6 +12,9 @@
       <Task v-for="(task, index) in taskList"
                  v-bind:task="task"
                  v-bind:delete-text="deleteText"
+                 v-bind:storage-key="storageKey"
+                 v-on:increase="_increaseCompleteTaskCount"
+                 v-on:decrease="_decreaseCompleteTaskCount"
                  >
       </Task>
     </ul>
@@ -20,27 +23,7 @@
 
 <script>
 import Task from './Task'
-
-const storage = {
-  fetch: function (key) {
-    var tasks = JSON.parse(localStorage.getItem(key) || '[]')
-    return tasks
-  },
-  save: function (key, tasks) {
-    localStorage.setItem(key, JSON.stringify(tasks))
-  },
-  getCurrentId: function (key) {
-    var tasks = JSON.parse(localStorage.getItem(key) || '[]')
-    var id = 0
-    tasks.map(function (task) {
-      if (id < task.id) {
-        id = task.id
-      }
-    })
-    console.log(id)
-    return id
-  }
-}
+import { fetch, save, getCurrentId } from './storage'
 
 export default {
   props: [
@@ -54,24 +37,16 @@ export default {
     return {
       target: '',
       action: '',
-      taskList: storage.fetch(this.storageKey),
-      index: storage.getCurrentId(this.storageKey),
-      totalTask: storage.fetch(this.storageKey).length,
+      taskList: fetch(this.storageKey),
+      index: getCurrentId(this.storageKey),
+      totalTask: fetch(this.storageKey).length,
       open: true,
       totalCompleteTask: 0
     }
   },
-  created: function () {
-    this.$parent.totalTask += storage.fetch(this.storageKey).length
-  },
   watch: {
     taskList: function (tasks) {
-      storage.save(this.storageKey, tasks)
-    },
-    totalCompleteTask: function (a) {
-      console.log(a)
-      this.$parent.totalCompleteTask += a
-      this.$parent.progressRate = this.$parent.totalCompleteTask / this.$parent.totalTask * 100
+      save(this.storageKey, tasks)
     }
   },
   methods: {
@@ -80,7 +55,8 @@ export default {
       this.taskList.push({
         id: this.index,
         targetText: this.target,
-        actionText: this.action
+        actionText: this.action,
+        isDone: false
       })
       this.target = ''
       this.action = ''
@@ -102,6 +78,14 @@ export default {
     _decreaseTaskCount: function () {
       this.totalTask -= 1
       this.$parent.totalTask -= 1
+    },
+    _increaseCompleteTaskCount: function () {
+      this.totalCompleteTask += 1
+      this.$parent.totalCompleteTask += 1
+    },
+    _decreaseCompleteTaskCount: function () {
+      this.totalCompleteTask -= 1
+      this.$parent.totalCompleteTask -= 1
     }
   }
 }
