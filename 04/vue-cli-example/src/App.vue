@@ -4,6 +4,8 @@
       <Subject :totalTask="totalTask" :totalCompleteTask="totalCompleteTask" v-bind:progressRate="progressRate"></Subject>
       <TaskList v-bind:storageKey="'1week-tasks'" v-bind:title="'1st week'"></TaskList>
       <TaskList v-bind:storageKey="'2week-tasks'" v-bind:title="'2nd week'"></TaskList>
+      <TaskList v-bind:storageKey="'3week-tasks'" v-bind:title="'3rd week'"></TaskList>
+      <TaskList v-bind:storageKey="'4week-tasks'" v-bind:title="'4th week'"></TaskList>
     </div>
   </div>
 </template>
