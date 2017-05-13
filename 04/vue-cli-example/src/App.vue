@@ -11,6 +11,8 @@
 <script>
 import Subject from './components/Subject'
 import TaskList from './components/TaskList'
+import { save, fetchSubject } from './storage'
+
 export default {
   name: 'app',
   components: {
@@ -24,12 +26,22 @@ export default {
       progressRate: 0
     }
   },
+  created: function () {
+    var obj = fetchSubject('count')
+    if (obj !== null) {
+      this.totalTask = obj.totalTask
+      this.totalCompleteTask = obj.totalCompleteTask
+      this.progressRate = obj.progressRate
+    }
+  },
   watch: {
     totalTask: function () {
       this.progressRate = this.totalCompleteTask / this.totalTask * 100
+      save('count', {'totalTask': this.totalTask, 'totalCompleteTask': this.totalCompleteTask, 'progressRate': this.progressRate})
     },
     totalCompleteTask: function () {
       this.progressRate = this.totalCompleteTask / this.totalTask * 100
+      save('count', {'totalTask': this.totalTask, 'totalCompleteTask': this.totalCompleteTask, 'progressRate': this.progressRate})
     }
   }
 }

@@ -44,10 +44,6 @@ export default {
       totalCompleteTask: 0
     }
   },
-  created: function () {
-    // 初期化処理
-    this.$parent.totalTask += fetch(this.storageKey).length
-  },
   watch: {
     taskList: function (tasks) {
       save(this.storageKey, tasks)
