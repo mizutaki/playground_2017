@@ -1,0 +1,32 @@
+<html>
+<body>
+  <h1>New Project</h1>
+  <form id="form" method="POST" action="/">
+    <input id="text" type="text" />
+    <button type="submit">ボタン</button>
+  </form>
+  <button id="clear" type="button" onclick="clear();">クリアボタン</button>
+  <p>
+    <%- JSON.stringify(user) %>
+  </p>
+  <script>
+  var form = document.querySelector('#form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    var text = document.querySelector('#text');
+    var XHR = new XMLHttpRequest();
+    XHR.open('POST','/');
+    XHR.setRequestHeader('Content-Type', 'application/json');
+    var json = JSON.stringify({ "key" : text.value });
+    XHR.send(json);
+  });
+  var clear = document.querySelector('#clear');
+  clear.addEventListener('click', function() {
+    console.log("clear");
+    var XHR = new XMLHttpRequest();
+    XHR.open('POST','/clear');
+    XHR.send();
+  });
+  </script>
+</body>
+</html>
