@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="upName" />
+    <input type="submit" />
+  </form>
+  <image id="img" src="/image" ondblclick="download()"></image>
+  <script>
+    function download() {
+      console.log("download");
+      window.open('/download');
+    }
+  </script>
+</body>
+</html>
