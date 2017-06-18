@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#archive">Archive</a>
+  </nav>
+  <div id="home" class="content">
+  <seciton>
+    <label>point</label>
+    <select name="category">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="5">5</option>
+      <option value="8">8</option>
+      <option value="13">13</option>
+      <option value="21">21</option>
+      <option value="34">34</option>
+    </select>
+    <input id="input" type="text" />
+    <input type="button" value="register" onclick="register();" />
+  </seciton>
+  <article id="registerContent">
+    <p>
+      <span>５</span><span>”A”を実装する</span>
+      <button value="終了">終了</button>
+    </p>
+    <p>
+    <span>２１</span><span>”B”を実装する</span>
+    <button value="終了">終了</button>
+    </p>
+  </article>
+  </div>
+  <div id="archive" class="content">
+    Archive Here!
+  </div>
+  <div id="myApp">
+  </div>
+  <script src="https://unpkg.com/react@15/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+  <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
+  <script src="dist/react/bundle.js"></script>
+  <script>
+  function register() {
+    var article = document.querySelector("#registerContent");
+    var p = document.createElement("p");
+    var text = document.querySelector("input");
+    p.innerHTML = text.value;
+    var category = document.getElementsByName("category");
+    p.innerHTML += category[0].value;
+    article.appendChild(p);
+  }
+  </script>
+</body>
+</html>
