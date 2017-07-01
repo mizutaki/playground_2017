@@ -1,25 +1,46 @@
+import low from 'lowdb'
+const db = low('db.json')
+db.defaults({ tasks: [], archive: [], id: 1 }).write()
+
+// db.get('posts')
+//   .push({title: 'lowdb'}).write()
+// console.log(db.get('posts[0].title').value());
 var Article = React.createClass({
   getInitialState() {
     return { value: "initial value" };
   },
   render: function() {
     return(
-      <p>[{this.props.content.fib}]{this.props.content.message}</p>
+      <div>
+        <p>[{this.props.content.fib}]{this.props.content.message}</p>
+        <Button buttonName="done" targetId={this.props.content.id}/>
+      </div>
     )
   }
 });
 
+var Button = React.createClass({
+  done(e) {
+    var targetId = Number.parseInt(e.currentTarget.getAttribute('data-targetId'));
+    db.get('tasks').remove({ id: targetId }).write();
+  },
+  render: function() {
+    return(
+      <button onClick={this.done} data-targetId={this.props.targetId}>{this.props.buttonName}</button>
+    )
+  }
+});
 var Form = React.createClass({
   getInitialState() {
     return {name: ''};
   },
   onPushText() {
-    console.log("onpush");
     var tx = ReactDOM.findDOMNode(this.refs.name).value;
     var se = ReactDOM.findDOMNode(this.refs.select).value;
-    console.log(tx);
-    console.log(se);
-    this.props.onEventCallBack({message : tx, fib : se});
+    var idNumber = db.get('id').value();
+    db.get('tasks').push({id: idNumber, message : tx, fib : se}).write();
+    db.set('id', idNumber + 1).write();
+    this.props.onEventCallBack({id: idNumber, message : tx, fib : se});
   },
   onChangeText(e) {
     console.log(e.target.value);
@@ -47,7 +68,8 @@ var Form = React.createClass({
 
 var ArticleContainer = React.createClass({
   getInitialState() {
-    return { contents: [{message: 'aaaaa', fib: 2}, {message: 'bbbbb', fib: 3}] };
+    //return { contents: [{message: 'aaaaa', fib: 2}, {message: 'bbbbb', fib: 3}] };
+    return { contents: db.get('tasks').value() }
   },
   pushMessage: function (comment) {
     console.log(this.state.contents);
