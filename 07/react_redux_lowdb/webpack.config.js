@@ -1,7 +1,7 @@
 module.exports = {
   //context: __dirname + '/src',
   entry: {
-    'react/bundle': './app.js'
+    'react/bundle': './index.js'
   },
   output: {
     path: __dirname +'/dist',
