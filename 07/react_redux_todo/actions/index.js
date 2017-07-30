@@ -1,8 +1,8 @@
-let nextTodoId = 0
+const shrotId = require('shortid')
 export const addTodo = (text) => {
   return {
     type: 'ADD_TODO',
-    id: nextTodoId++,
+    id: shrotId.generate(),
     text
   }
 }
