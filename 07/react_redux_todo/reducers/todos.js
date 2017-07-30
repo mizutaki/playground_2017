@@ -4,7 +4,8 @@ const todo = (state, action) => {
     case 'ADD_TODO':
       return {
         id: action.id,
-        text: action.text
+        text: action.text,
+        fivonacci: action.fivonacci
       }
     default:
       return state
